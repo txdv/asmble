@@ -53,6 +53,7 @@ open class AstToSExpr(val parensInstrs: Boolean = true) {
 
     fun fromElemType(v: Node.ElemType) = when(v) {
         Node.ElemType.ANYFUNC -> fromString("anyfunc")
+        Node.ElemType.EXTERNREF -> fromString("externref")
     }
 
     fun fromExport(v: Node.Export) = newMulti("export") + v.field.quoted + when(v.kind) {
@@ -245,6 +246,7 @@ open class AstToSExpr(val parensInstrs: Boolean = true) {
         is Node.Type.Value.I64 -> "i64"
         is Node.Type.Value.F32 -> "f32"
         is Node.Type.Value.F64 -> "f64"
+        is Node.Type.Value.ExternRef -> "externref"
     })
 
     fun fromTypeDef(v: Node.Type.Func, name: String? = null) =

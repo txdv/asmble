@@ -165,6 +165,7 @@ val Node.Type.Value.kclass: KClass<*> get() = when (this) {
     Node.Type.Value.I64 -> Long::class
     Node.Type.Value.F32 -> Float::class
     Node.Type.Value.F64 -> Double::class
+    Node.Type.Value.ExternRef -> Any::class
 }
 
 val Node.Type.Value.typeRef: TypeRef get() = this.jclass.ref

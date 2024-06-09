@@ -351,6 +351,7 @@ open class AstToAsm {
                                 is Node.Type.Value.I64 -> 0L.const
                                 is Node.Type.Value.F32 -> 0F.const
                                 is Node.Type.Value.F64 -> 0.0.const
+                                is Node.Type.Value.ExternRef -> TODO()
                             })
                             else -> throw CompileErr.GlobalInitNotConstant(index)
                         }
@@ -524,6 +525,7 @@ open class AstToAsm {
                 is Node.Type.Value.I64 -> Opcodes.LLOAD
                 is Node.Type.Value.F32 -> Opcodes.FLOAD
                 is Node.Type.Value.F64 -> Opcodes.DLOAD
+                is Node.Type.Value.ExternRef -> Opcodes.ALOAD
             }
             method.instructions.add(VarInsnNode(op, stackIndex))
             stackIndex + param.typeRef.stackSize
@@ -554,6 +556,7 @@ open class AstToAsm {
             Node.Type.Value.I64 -> Opcodes.LRETURN
             Node.Type.Value.F32 -> Opcodes.FRETURN
             Node.Type.Value.F64 -> Opcodes.DRETURN
+            Node.Type.Value.ExternRef -> Opcodes.ARETURN
         }))
         method.visibleAnnotations = listOf(exportAnnotation(export))
         ctx.cls.methods.plusAssign(method)
@@ -583,6 +586,7 @@ open class AstToAsm {
             Node.Type.Value.I64 -> Opcodes.LRETURN
             Node.Type.Value.F32 -> Opcodes.FRETURN
             Node.Type.Value.F64 -> Opcodes.DRETURN
+            Node.Type.Value.ExternRef -> Opcodes.ARETURN
         }))
         getter.visibleAnnotations = listOf(exportAnnotation(export))
         ctx.cls.methods.plusAssign(getter)
@@ -599,6 +603,7 @@ open class AstToAsm {
                     Node.Type.Value.I64 -> Opcodes.LLOAD
                     Node.Type.Value.F32 -> Opcodes.FLOAD
                     Node.Type.Value.F64 -> Opcodes.DLOAD
+                    Node.Type.Value.ExternRef -> Opcodes.ALOAD
                 }, 1),
                 MethodInsnNode(Opcodes.INVOKEVIRTUAL, MethodHandle::class.ref.asmName, "invokeExact",
                     "(${type.contentType.typeRef.asmDesc})V", false),
@@ -609,6 +614,7 @@ open class AstToAsm {
                     Node.Type.Value.I64 -> Opcodes.LLOAD
                     Node.Type.Value.F32 -> Opcodes.FLOAD
                     Node.Type.Value.F64 -> Opcodes.DLOAD
+                    Node.Type.Value.ExternRef -> Opcodes.ALOAD
                 }, 1),
                 FieldInsnNode(Opcodes.PUTFIELD, ctx.thisRef.asmName, ctx.globalName(export.index),
                     type.contentType.typeRef.asmDesc),

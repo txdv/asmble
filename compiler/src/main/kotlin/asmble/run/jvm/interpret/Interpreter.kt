@@ -603,6 +603,7 @@ open class Interpreter {
                 is Node.Type.Value.I64 -> 0L as Number
                 is Node.Type.Value.F32 -> 0f as Number
                 is Node.Type.Value.F64 -> 0.0 as Number
+                is Node.Type.Value.ExternRef -> TODO()
             }
         }.toMutableList()
 
@@ -622,6 +623,7 @@ open class Interpreter {
             is Node.Type.Value.I64 -> popLong()
             is Node.Type.Value.F32 -> popFloat()
             is Node.Type.Value.F64 -> popDouble()
+            is Node.Type.Value.ExternRef -> TODO()
         }
         fun popCallArgs(type: Node.Type.Func) = type.params.reversed().map(::pop).reversed()
         fun push(v: Number) { valueStack += v }

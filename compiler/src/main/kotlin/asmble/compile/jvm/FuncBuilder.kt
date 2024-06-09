@@ -66,6 +66,7 @@ open class FuncBuilder {
                 Node.Type.Value.I64 -> Opcodes.LRETURN
                 Node.Type.Value.F32 -> Opcodes.FRETURN
                 Node.Type.Value.F64 -> Opcodes.DRETURN
+                Node.Type.Value.ExternRef -> Opcodes.ARETURN
             }))
         }
         return func
@@ -1176,20 +1177,22 @@ open class FuncBuilder {
 
     fun applySetLocal(ctx: FuncContext, fn: Func, index: Int) =
         fn.popExpecting(ctx.node.localByIndex(index).typeRef).let { fn ->
-            when (ctx.node.localByIndex(index)) {
-                Node.Type.Value.I32 -> fn.addInsns(VarInsnNode(Opcodes.ISTORE, ctx.actualLocalIndex(index)))
-                Node.Type.Value.I64 -> fn.addInsns(VarInsnNode(Opcodes.LSTORE, ctx.actualLocalIndex(index)))
-                Node.Type.Value.F32 -> fn.addInsns(VarInsnNode(Opcodes.FSTORE, ctx.actualLocalIndex(index)))
-                Node.Type.Value.F64 -> fn.addInsns(VarInsnNode(Opcodes.DSTORE, ctx.actualLocalIndex(index)))
-            }
+            val typeValue = ctx.node.localByIndex(index)
+            fn.addInsns(VarInsnNode(store(typeValue), ctx.actualLocalIndex(index)))
         }
 
-    fun applyGetLocal(ctx: FuncContext, fn: Func, index: Int) = when (ctx.node.localByIndex(index)) {
-        Node.Type.Value.I32 -> fn.addInsns(VarInsnNode(Opcodes.ILOAD, ctx.actualLocalIndex(index)))
-        Node.Type.Value.I64 -> fn.addInsns(VarInsnNode(Opcodes.LLOAD, ctx.actualLocalIndex(index)))
-        Node.Type.Value.F32 -> fn.addInsns(VarInsnNode(Opcodes.FLOAD, ctx.actualLocalIndex(index)))
-        Node.Type.Value.F64 -> fn.addInsns(VarInsnNode(Opcodes.DLOAD, ctx.actualLocalIndex(index)))
-    }.push(ctx.node.localByIndex(index).typeRef)
+    fun store(typeValue: Node.Type.Value): Int =
+        when (typeValue) {
+            Node.Type.Value.I32 -> Opcodes.ISTORE
+            Node.Type.Value.I64 -> Opcodes.LSTORE
+            Node.Type.Value.F32 -> Opcodes.FSTORE
+            Node.Type.Value.F64 -> Opcodes.DSTORE
+            Node.Type.Value.ExternRef -> Opcodes.ASTORE
+        }
+
+    fun applyGetLocal(ctx: FuncContext, fn: Func, index: Int) =
+        fn.addInsns(VarInsnNode(store(ctx.node.localByIndex(index)), ctx.actualLocalIndex(index)))
+                .push(ctx.node.localByIndex(index).typeRef)
 
     fun applySelectInsn(ctx: FuncContext, fn: Func): Func {
         // 3 things, first two must have same type, third is 0 check (0 means use second, otherwise use first)
@@ -1276,15 +1279,10 @@ open class FuncBuilder {
             return when (ctx.node.type.ret) {
                 null ->
                     fn.addInsns(InsnNode(Opcodes.RETURN))
-                Node.Type.Value.I32 ->
-                    fn.popExpecting(Int::class.ref, block).addInsns(InsnNode(Opcodes.IRETURN))
-                Node.Type.Value.I64 ->
-                    fn.popExpecting(Long::class.ref, block).addInsns(InsnNode(Opcodes.LRETURN))
-                Node.Type.Value.F32 ->
-                    fn.popExpecting(Float::class.ref, block).addInsns(InsnNode(Opcodes.FRETURN))
-                Node.Type.Value.F64 ->
-                    fn.popExpecting(Double::class.ref, block).addInsns(InsnNode(Opcodes.DRETURN))
+                else ->
+                    fn.popExpecting(Int::class.ref, block).addInsns(InsnNode(store(ctx.node.type.ret)))
             }.let { fn ->
+
                 if (fn.stack.isNotEmpty()) throw CompileErr.UnusedStackOnReturn(fn.stack)
                 fn.markUnreachable()
             }

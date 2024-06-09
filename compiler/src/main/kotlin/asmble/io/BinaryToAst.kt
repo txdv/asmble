@@ -53,6 +53,7 @@ open class BinaryToAst(
     fun toElemType(b: ByteReader) = b.readVarInt7().toInt().let {
         when (it) {
             -0x10 -> Node.ElemType.ANYFUNC
+            -0x11 -> Node.ElemType.EXTERNREF
             else -> error("Unrecognized elem type: $it")
         }
     }
@@ -244,6 +245,7 @@ open class BinaryToAst(
         -0x02 -> Node.Type.Value.I64
         -0x03 -> Node.Type.Value.F32
         -0x04 -> Node.Type.Value.F64
+        -0x11 -> Node.Type.Value.ExternRef
         else -> error("Unknown value type: $type")
     }
 

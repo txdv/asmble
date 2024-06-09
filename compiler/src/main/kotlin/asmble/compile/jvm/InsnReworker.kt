@@ -81,6 +81,7 @@ open class InsnReworker {
                 is Node.Type.Value.I64 -> Node.Instr.I64Const(0)
                 is Node.Type.Value.F32 -> Node.Instr.F32Const(0f)
                 is Node.Type.Value.F64 -> Node.Instr.F64Const(0.0)
+                is Node.Type.Value.ExternRef -> Node.Instr.Nop
             }
             listOf(Insn.Node(const), Insn.Node(Node.Instr.SetLocal(it)))
         } + insns

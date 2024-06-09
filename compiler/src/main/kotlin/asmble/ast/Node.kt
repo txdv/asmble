@@ -24,7 +24,7 @@ sealed class Node {
     }
 
     enum class ElemType {
-        ANYFUNC
+        ANYFUNC, EXTERNREF
     }
 
     sealed class Type : Node() {
@@ -41,6 +41,11 @@ sealed class Node {
             }
             object F64 : Value() {
                 override fun toString() = "F64"
+            }
+
+            object ExternRef : Value() {
+                override fun toString() = "ExternRef"
+
             }
         }
 

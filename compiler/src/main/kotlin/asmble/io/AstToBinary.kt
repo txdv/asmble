@@ -263,10 +263,12 @@ open class AstToBinary(val version: Long = 1L) {
         Node.Type.Value.I64 -> -0x02
         Node.Type.Value.F32 -> -0x03
         Node.Type.Value.F64 -> -0x04
+        Node.Type.Value.ExternRef -> -0x11
     }
 
     val Node.ElemType.elemType: Byte get() = when(this) {
         Node.ElemType.ANYFUNC -> -0x10
+        Node.ElemType.EXTERNREF -> -0x11
     }
 
     companion object : AstToBinary()
