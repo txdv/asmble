@@ -355,6 +355,10 @@ sealed class Node {
         object I32TruncUF32 : Instr(), Args.None
         object I32TruncSF64 : Instr(), Args.None
         object I32TruncUF64 : Instr(), Args.None
+        object I32Extend8S : Instr(), Args.None
+        object I32Extend16S : Instr(), Args.None
+        object I64Extend8S : Instr(), Args.None
+        object I64Extend16S : Instr(), Args.None
         object I64ExtendSI32 : Instr(), Args.None
         object I64ExtendUI32 : Instr(), Args.None
         object I64TruncSF32 : Instr(), Args.None
@@ -641,6 +645,10 @@ sealed class Node {
                 opMapEntry("i32.trunc_u/f64", 0xab, ConvertOp::NoArg, Instr.I32TruncUF64, Instr.I32TruncUF64::class)
                 opMapEntry("i64.extend_s/i32", 0xac, ConvertOp::NoArg, Instr.I64ExtendSI32, Instr.I64ExtendSI32::class)
                 opMapEntry("i64.extend_u/i32", 0xad, ConvertOp::NoArg, Instr.I64ExtendUI32, Instr.I64ExtendUI32::class)
+                opMapEntry("i32.extend8_s/i32", 0xc0, ConvertOp::NoArg, Instr.I32Extend8S, Instr.I32Extend8S::class)
+                opMapEntry("i32.extend16_s/i32", 0xc1, ConvertOp::NoArg, Instr.I32Extend16S, Instr.I32Extend16S::class)
+                opMapEntry("i64.extend8_s/i32", 0xc2, ConvertOp::NoArg, Instr.I64Extend8S, Instr.I64Extend8S::class)
+                opMapEntry("i64.extend16_s/i32", 0xc3, ConvertOp::NoArg, Instr.I64Extend16S, Instr.I64Extend16S::class)
                 opMapEntry("i64.trunc_s/f32", 0xae, ConvertOp::NoArg, Instr.I64TruncSF32, Instr.I64TruncSF32::class)
                 opMapEntry("i64.trunc_u/f32", 0xaf, ConvertOp::NoArg, Instr.I64TruncUF32, Instr.I64TruncUF32::class)
                 opMapEntry("i64.trunc_s/f64", 0xb0, ConvertOp::NoArg, Instr.I64TruncSF64, Instr.I64TruncSF64::class)

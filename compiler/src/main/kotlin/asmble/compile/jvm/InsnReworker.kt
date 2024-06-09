@@ -274,6 +274,8 @@ open class InsnReworker {
         is Node.Instr.F64Trunc, is Node.Instr.F64Nearest, is Node.Instr.F64Sqrt -> POP_PARAM + PUSH_RESULT
         is Node.Instr.I32WrapI64, is Node.Instr.I32TruncSF32, is Node.Instr.I32TruncUF32,
         is Node.Instr.I32TruncSF64, is Node.Instr.I32TruncUF64, is Node.Instr.I64ExtendSI32,
+        is Node.Instr.I32Extend8S, is Node.Instr.I32Extend16S,
+        is Node.Instr.I64Extend8S, is Node.Instr.I64Extend16S,
         is Node.Instr.I64ExtendUI32, is Node.Instr.I64TruncSF32, is Node.Instr.I64TruncUF32,
         is Node.Instr.I64TruncSF64, is Node.Instr.I64TruncUF64, is Node.Instr.F32ConvertSI32,
         is Node.Instr.F32ConvertUI32, is Node.Instr.F32ConvertSI64, is Node.Instr.F32ConvertUI64,

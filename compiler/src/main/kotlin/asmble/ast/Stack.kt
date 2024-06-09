@@ -129,6 +129,8 @@ data class Stack(
                 is Node.Instr.I32ReinterpretF32 -> popF32() + pushI32()
             is Node.Instr.I32TruncSF64, is Node.Instr.I32TruncUF64 -> popF64() + pushI32()
             is Node.Instr.I64ExtendSI32, is Node.Instr.I64ExtendUI32 -> popI32() + pushI64()
+            is Node.Instr.I32Extend8S, is Node.Instr.I32Extend16S-> popI32() + pushI32()
+            is Node.Instr.I64Extend8S, is Node.Instr.I64Extend16S-> popI32() + pushI64()
             is Node.Instr.I64TruncSF32, is Node.Instr.I64TruncUF32 -> popF32() + pushI64()
             is Node.Instr.I64TruncSF64, is Node.Instr.I64TruncUF64,
                 is Node.Instr.I64ReinterpretF64 -> popF64() + pushI64()

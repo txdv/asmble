@@ -399,6 +399,14 @@ open class FuncBuilder {
                     applyConv(ctx, fn, Long::class.ref, Int::class.ref, Opcodes.L2I)
                 }
             }
+        is Node.Instr.I32Extend8S ->
+            applyConv(ctx, fn, Int::class.ref, Int::class.ref, Opcodes.NOP)
+        is Node.Instr.I32Extend16S ->
+            applyConv(ctx, fn, Int::class.ref, Int::class.ref, Opcodes.NOP)
+        is Node.Instr.I64Extend8S ->
+            applyConv(ctx, fn, Int::class.ref, Long::class.ref, Opcodes.I2L)
+        is Node.Instr.I64Extend16S ->
+            applyConv(ctx, fn, Int::class.ref, Long::class.ref, Opcodes.I2L)
         is Node.Instr.I64ExtendSI32 ->
             applyConv(ctx, fn, Int::class.ref, Long::class.ref, Opcodes.I2L)
         is Node.Instr.I64ExtendUI32 ->

@@ -359,6 +359,10 @@ open class Interpreter {
                 is Node.Instr.I32TruncUF64 -> next {
                     push(ctx.checkedTrunc(popDouble(), false) { it.toLong().toInt() })
                 }
+                is Node.Instr.I32Extend8S -> next { push(popInt()) }
+                is Node.Instr.I32Extend16S -> next { push(popInt()) }
+                is Node.Instr.I64Extend8S -> next { push(popInt().toLong()) }
+                is Node.Instr.I64Extend16S -> next { push(popInt().toLong()) }
                 is Node.Instr.I64ExtendSI32 -> next { push(popInt().toLong()) }
                 is Node.Instr.I64ExtendUI32 -> next { push(popInt().toUnsignedLong()) }
                 is Node.Instr.I64TruncSF32 -> next {

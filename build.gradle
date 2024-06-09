@@ -280,43 +280,5 @@ def publishSettings(project, projectName, projectDescription, includeJavadoc) {
         signing {
             sign configurations.archives
         }
-
-        uploadArchives {
-            repositories {
-                mavenDeployer {
-                    beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-                    repository(url: 'https://oss.sonatype.org/service/local/staging/deploy/maven2/') {
-                        authentication(userName: ossrhUsername, password: ossrhPassword)
-                    }
-                    snapshotRepository(url: 'https://oss.sonatype.org/content/repositories/snapshots/') {
-                        authentication(userName: ossrhUsername, password: ossrhPassword)
-                    }
-                    pom.project {
-                        name projectName
-                        packaging 'jar'
-                        description projectDescription
-                        url 'https://github.com/cretz/asmble'
-                        scm {
-                            connection 'scm:git:git@github.com:cretz/asmble.git'
-                            developerConnection 'scm:git:git@github.com:cretz/asmble.git'
-                            url 'git@github.com:cretz/asmble.git'
-                        }
-                        licenses {
-                            license {
-                                name 'MIT License'
-                                url 'https://opensource.org/licenses/MIT'
-                            }
-                        }
-                        developers {
-                            developer {
-                                id 'cretz'
-                                name 'Chad Retz'
-                                url 'https://github.com/cretz'
-                            }
-                        }
-                    }
-                }
-            }
-        }
     }
 }
