@@ -123,7 +123,8 @@ open class AstToSExpr(val parensInstrs: Boolean = true) {
         when (it) {
             is Node.InstrOp.ControlFlowOp.NoArg, is Node.InstrOp.ParamOp.NoArg,
                 is Node.InstrOp.CompareOp.NoArg, is Node.InstrOp.NumOp.NoArg,
-                is Node.InstrOp.ConvertOp.NoArg, is Node.InstrOp.ReinterpretOp.NoArg -> exp
+                is Node.InstrOp.ConvertOp.NoArg, is Node.InstrOp.ReinterpretOp.NoArg,
+                is Node.InstrOp.RefOp -> exp
             is Node.InstrOp.ControlFlowOp.TypeArg -> exp + it.argsOf(v).type?.let(this::fromType)
             is Node.InstrOp.ControlFlowOp.DepthArg -> exp + it.argsOf(v).relativeDepth
             is Node.InstrOp.ControlFlowOp.TableArg -> it.argsOf(v).let {

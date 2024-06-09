@@ -401,6 +401,7 @@ open class Interpreter {
                 is Node.Instr.I64ReinterpretF64 -> next { push(java.lang.Double.doubleToRawLongBits(popDouble())) }
                 is Node.Instr.F32ReinterpretI32 -> next { push(java.lang.Float.intBitsToFloat(popInt())) }
                 is Node.Instr.F64ReinterpretI64 -> next { push(java.lang.Double.longBitsToDouble(popLong())) }
+                is Node.Instr.RefNull -> next { TODO() }
             }
         }
     }

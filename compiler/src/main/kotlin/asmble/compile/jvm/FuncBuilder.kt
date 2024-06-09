@@ -459,6 +459,8 @@ open class FuncBuilder {
         is Node.Instr.F64ReinterpretI64 ->
             applyConv(ctx, fn, Long::class.ref, Double::class.ref,
                 java.lang.Double::class.invokeStatic("longBitsToDouble", Double::class, Long::class))
+        is Node.Instr.RefNull ->
+            fn.addInsns(InsnNode(Opcodes.ACONST_NULL))
     }
 
     fun popForBlockEscape(ctx: FuncContext, fn: Func, block: Func.Block) =
@@ -1180,11 +1182,11 @@ open class FuncBuilder {
     }
 
     fun applyGetTable(ctx: FuncContext, fn: Func, index: Int): Func {
-        return TODO("setTable");
+        TODO("setTable");
     }
 
     fun applySetTable(ctx: FuncContext, fn: Func, index: Int): Func {
-        return TODO("setTable");
+        TODO("setTable");
     }
 
     fun applySetLocal(ctx: FuncContext, fn: Func, index: Int) =

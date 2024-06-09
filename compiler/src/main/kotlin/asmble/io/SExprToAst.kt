@@ -828,6 +828,7 @@ open class SExprToAst(
             is InstrOp.NumOp.NoArg -> Pair(op.create, 1)
             is InstrOp.ConvertOp.NoArg -> Pair(op.create, 1)
             is InstrOp.ReinterpretOp.NoArg -> Pair(op.create, 1)
+            is InstrOp.RefOp.HeapType -> TODO("sexpr not supported")
         }
     }
 

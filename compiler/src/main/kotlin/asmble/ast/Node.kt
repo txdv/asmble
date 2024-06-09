@@ -183,6 +183,8 @@ sealed class Node {
             interface ReservedIndex : Index, Reserved
             interface AlignOffset : Args { val align: Int; val offset: Long }
             interface Const<out T : Number> : Args { val value: T }
+
+            interface HeapType : Args { val heapType: Int }
         }
 
         // Control flow
@@ -385,6 +387,8 @@ sealed class Node {
         object I64ReinterpretF64 : Instr(), Args.None
         object F32ReinterpretI32 : Instr(), Args.None
         object F64ReinterpretI64 : Instr(), Args.None
+
+        data class RefNull(override val heapType: Int) : Instr(), Args.HeapType
     }
 
     sealed class InstrOp<out A : Instr.Args> {
@@ -452,6 +456,10 @@ sealed class Node {
 
         sealed class ReinterpretOp : InstrOp<Instr.Args.None>() {
             data class NoArg(override val name: String, val create: Instr) : ReinterpretOp()
+        }
+
+        sealed class RefOp: InstrOp<Instr.Args.None>() {
+            data class HeapType(override val name: String, val create: (Int) -> Instr) : RefOp()
         }
 
         companion object {
@@ -671,6 +679,8 @@ sealed class Node {
                 opMapEntry("f32.reinterpret/i32", 0xbe, ReinterpretOp::NoArg, Instr.F32ReinterpretI32, Instr.F32ReinterpretI32::class)
                 opMapEntry("f64.reinterpret/i64", 0xbf, ReinterpretOp::NoArg, Instr.F64ReinterpretI64, Instr.F64ReinterpretI64::class)
 
+                opMapEntry("ref.null", 0xd0, ::HeapTypeArg, Instr::RefNull, Instr.RefNull::class)
+
                 this.strToOpMap = strToOpMap
                 this.classToOpMap = classToOpMap
                 this.strToOpcodeMap = strToOpcodeMap
@@ -688,6 +698,7 @@ typealias ControlFlowOpTableArg = Node.InstrOp.ControlFlowOp.TableArg
 typealias CallOpIndexArg = Node.InstrOp.CallOp.IndexArg
 typealias CallOpIndexReservedArg = Node.InstrOp.CallOp.IndexReservedArg
 typealias MemOpAlignOffsetArg = Node.InstrOp.MemOp.AlignOffsetArg
+typealias HeapTypeArg = Node.InstrOp.RefOp.HeapType
 typealias MemOpReservedArg = Node.InstrOp.MemOp.ReservedArg
 typealias ConstOpIntArg = Node.InstrOp.ConstOp.IntArg
 typealias ConstOpLongArg = Node.InstrOp.ConstOp.LongArg

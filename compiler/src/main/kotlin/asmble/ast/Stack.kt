@@ -142,6 +142,7 @@ data class Stack(
             is Node.Instr.F64ConvertSI64, is Node.Instr.F64ConvertUI64,
                 is Node.Instr.F64ReinterpretI64 -> popI64() + pushF64()
             is Node.Instr.F64PromoteF32 -> popF32() + pushF64()
+            is Node.Instr.RefNull -> pushExternRef()
         }
     }
 
@@ -170,7 +171,7 @@ data class Stack(
         it.mod.globals.getOrNull(index - it.importGlobals.size)?.type?.contentType
     }
 
-    protected fun table(index: Int): Node.Type.Value = Node.Type.Value.F32
+    protected fun table(index: Int): Node.Type.Value = Node.Type.Value.ExternRef
     protected fun func(index: Int) = mod?.let {
         it.importFuncs.getOrNull(index)?.typeIndex?.let { i -> it.mod.types.getOrNull(i) } ?:
             it.mod.funcs.getOrNull(index - it.importFuncs.size)?.type
@@ -195,12 +196,16 @@ data class Stack(
     protected fun MutableList<Node.Type.Value>?.popF32() = pop(Node.Type.Value.F32)
     protected fun MutableList<Node.Type.Value>?.popF64() = pop(Node.Type.Value.F64)
 
+    protected fun MutableList<Node.Type.Value>?.popExternRef() = pop(Node.Type.Value.ExternRef)
+
     protected fun MutableList<Node.Type.Value>?.push(type: Node.Type.Value? = null) =
         listOf(StackChange(type, false)).also { if (this != null && type != null) add(type) }
     protected fun MutableList<Node.Type.Value>?.pushI32() = push(Node.Type.Value.I32)
     protected fun MutableList<Node.Type.Value>?.pushI64() = push(Node.Type.Value.I64)
     protected fun MutableList<Node.Type.Value>?.pushF32() = push(Node.Type.Value.F32)
     protected fun MutableList<Node.Type.Value>?.pushF64() = push(Node.Type.Value.F64)
+
+    protected fun MutableList<Node.Type.Value>?.pushExternRef() = push(Node.Type.Value.ExternRef)
 
     data class InsnApply(
         val insn: Node.Instr,

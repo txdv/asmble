@@ -345,6 +345,9 @@ open class AstToAsm {
                                     }
                                 }
                             }
+                            is Node.Instr.RefNull -> {
+                                listOf(InsnNode(Opcodes.ACONST_NULL))
+                            }
                             // Otherwise, global constant
                             null -> listOf(when (global.type.contentType) {
                                 is Node.Type.Value.I32 -> 0.const

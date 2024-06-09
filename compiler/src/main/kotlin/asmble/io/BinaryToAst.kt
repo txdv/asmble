@@ -161,6 +161,8 @@ open class BinaryToAst(
                 op.create
             is Node.InstrOp.ReinterpretOp.NoArg ->
                 op.create
+            is Node.InstrOp.RefOp.HeapType ->
+                op.create(b.readVarUInt7().toInt())
         }
     }
 
