@@ -201,6 +201,8 @@ open class Interpreter {
                 is Node.Instr.TeeLocal -> next { locals[insn.index] = peek() }
                 is Node.Instr.GetGlobal -> next { push(ctx.getGlobal(insn.index)) }
                 is Node.Instr.SetGlobal -> next { ctx.setGlobal(insn.index, pop()) }
+                is Node.Instr.GetTable -> next { push(ctx.getTable(insn.index)) }
+                is Node.Instr.SetTable -> next { ctx.setTable(insn.index, pop()) }
                 is Node.Instr.I32Load -> next { push(ctx.mem.getInt(insn.popMemAddr())) }
                 is Node.Instr.I64Load -> next { push(ctx.mem.getLong(insn.popMemAddr())) }
                 is Node.Instr.F32Load -> next { push(ctx.mem.getFloat(insn.popMemAddr())) }
@@ -519,6 +521,13 @@ open class Interpreter {
                 require(index < moduleGlobals.size)
                 moduleGlobals[index] = v
             }
+        }
+
+        fun getTable(index: Int): Number =
+            TODO("getTable")
+
+        fun setTable(index: Int, v: Number) {
+            TODO("setTable")
         }
 
         val table = run {

@@ -140,6 +140,10 @@ open class FuncBuilder {
             applyGetGlobal(ctx, fn, i.index)
         is Node.Instr.SetGlobal ->
             applySetGlobal(ctx, fn, i.index)
+        is Node.Instr.GetTable ->
+            applyGetTable(ctx, fn, i.index)
+        is Node.Instr.SetTable ->
+            applySetTable(ctx, fn, i.index)
         is Node.Instr.I32Load, is Node.Instr.I64Load, is Node.Instr.F32Load, is Node.Instr.F64Load,
         is Node.Instr.I32Load8S, is Node.Instr.I32Load8U, is Node.Instr.I32Load16U, is Node.Instr.I32Load16S,
         is Node.Instr.I64Load8S, is Node.Instr.I64Load8U, is Node.Instr.I64Load16U, is Node.Instr.I64Load16S,
@@ -1173,6 +1177,14 @@ open class FuncBuilder {
         fn.popExpecting(typeRef).
             addInsns(InsnNode(if (typeRef.stackSize == 2) Opcodes.DUP2 else Opcodes.DUP)).
             push(typeRef).push(typeRef).let { fn -> applySetLocal(ctx, fn, index) }
+    }
+
+    fun applyGetTable(ctx: FuncContext, fn: Func, index: Int): Func {
+        return TODO("setTable");
+    }
+
+    fun applySetTable(ctx: FuncContext, fn: Func, index: Int): Func {
+        return TODO("setTable");
     }
 
     fun applySetLocal(ctx: FuncContext, fn: Func, index: Int) =

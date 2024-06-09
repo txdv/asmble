@@ -219,6 +219,9 @@ sealed class Node {
         data class GetGlobal(override val index: Int) : Instr(), Args.Index
         data class SetGlobal(override val index: Int) : Instr(), Args.Index
 
+        data class GetTable(override val index: Int): Instr(), Args.Index
+        data class SetTable(override val index: Int): Instr(), Args.Index
+
         // Memory operators
         data class I32Load(override val align: Int, override val offset: Long) : Instr(), Args.AlignOffset
         data class I64Load(override val align: Int, override val offset: Long) : Instr(), Args.AlignOffset
@@ -507,6 +510,8 @@ sealed class Node {
                 opMapEntry("tee_local", 0x22, VarOp::IndexArg, Instr::TeeLocal, Instr.TeeLocal::class)
                 opMapEntry("get_global", 0x23, VarOp::IndexArg, Instr::GetGlobal, Instr.GetGlobal::class)
                 opMapEntry("set_global", 0x24, VarOp::IndexArg, Instr::SetGlobal, Instr.SetGlobal::class)
+                opMapEntry("get_table", 0x25, VarOp::IndexArg, Instr::GetTable, Instr.GetTable::class)
+                opMapEntry("set_table", 0x26, VarOp::IndexArg, Instr::SetTable, Instr.SetTable::class)
 
                 opMapEntry("i32.load", 0x28, ::MemOpAlignOffsetArg, Instr::I32Load, Instr.I32Load::class)
                 opMapEntry("i64.load", 0x29, ::MemOpAlignOffsetArg, Instr::I64Load, Instr.I64Load::class)

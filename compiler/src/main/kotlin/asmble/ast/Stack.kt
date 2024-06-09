@@ -77,6 +77,8 @@ data class Stack(
             is Node.Instr.TeeLocal -> local(v.index).let { pop(it) + push(it) }
             is Node.Instr.GetGlobal -> push(global(v.index))
             is Node.Instr.SetGlobal -> pop(global(v.index))
+            is Node.Instr.GetTable -> push(table(v.index))
+            is Node.Instr.SetTable -> pop(table(v.index))
             is Node.Instr.I32Load, is Node.Instr.I32Load8S, is Node.Instr.I32Load8U,
                 is Node.Instr.I32Load16U, is Node.Instr.I32Load16S -> popI32() + pushI32()
             is Node.Instr.I64Load, is Node.Instr.I64Load8S, is Node.Instr.I64Load8U, is Node.Instr.I64Load16U,
@@ -167,6 +169,8 @@ data class Stack(
         it.importGlobals.getOrNull(index)?.type?.contentType ?:
         it.mod.globals.getOrNull(index - it.importGlobals.size)?.type?.contentType
     }
+
+    protected fun table(index: Int): Node.Type.Value = Node.Type.Value.F32
     protected fun func(index: Int) = mod?.let {
         it.importFuncs.getOrNull(index)?.typeIndex?.let { i -> it.mod.types.getOrNull(i) } ?:
             it.mod.funcs.getOrNull(index - it.importFuncs.size)?.type
@@ -219,6 +223,7 @@ data class Stack(
     class CachedModule(val mod: Node.Module) {
         val importFuncs by lazy { mod.imports.mapNotNull { it.kind as? Node.Import.Kind.Func } }
         val importGlobals by lazy { mod.imports.mapNotNull { it.kind as? Node.Import.Kind.Global } }
+        val importTables by lazy { mod.imports.mapNotNull { it.kind as? Node.Import.Kind.Table } }
     }
 
     companion object {

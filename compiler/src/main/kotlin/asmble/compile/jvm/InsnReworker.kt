@@ -232,6 +232,8 @@ open class InsnReworker {
         is Node.Instr.TeeLocal -> POP_PARAM + PUSH_RESULT
         is Node.Instr.GetGlobal -> PUSH_RESULT
         is Node.Instr.SetGlobal -> POP_PARAM
+        is Node.Instr.GetTable -> PUSH_RESULT
+        is Node.Instr.SetTable -> POP_PARAM
         is Node.Instr.I32Load, is Node.Instr.I64Load, is Node.Instr.F32Load, is Node.Instr.F64Load,
         is Node.Instr.I32Load8S, is Node.Instr.I32Load8U, is Node.Instr.I32Load16U, is Node.Instr.I32Load16S,
         is Node.Instr.I64Load8S, is Node.Instr.I64Load8U, is Node.Instr.I64Load16U, is Node.Instr.I64Load16S,
